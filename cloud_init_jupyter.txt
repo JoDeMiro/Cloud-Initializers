@@ -1,0 +1,228 @@
+#cloud-config
+
+packages:
+  - git
+  - openssh-client
+
+write_files:
+- path: /bin/jupyter-add-user.sh
+  content: |
+    #!/bin/bash
+    export USR='ubuntu'
+    echo " "
+    echo "---------------> Creating user \"$USR\" starts."
+    echo " "
+    adduser --disabled-password --gecos "" $USR
+    echo " "
+    echo "---------------> Creating user \"$USR\" finished."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-update.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Update Ubuntu."
+    echo " "
+    sudo apt-get -y update
+    echo " "
+    echo "---------------> Update Ubuntu finished."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-install-base-tools.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Installing base tools as admin"
+    echo " "
+    
+    sudo apt-get -y install zip
+    sudo apt-get -y install unzip
+    sudo apt-get -y install fish
+
+    echo " "
+    echo "---------------> Installing base tools as admin finished."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-install-ext.sh
+  content: |
+    #!/bin/bash
+    echo "---------------> Installing some stuff needed for Python."
+    
+    # These are requred for some Python module
+    
+    sudo apt-get -y install libc6-dev
+    sudo apt-get -y install libsm6
+    sudo apt-get -y install libxext6
+    sudo apt-get -y install graphviz
+    
+    echo "---------------> Installing some stuff needed for Python finished."
+  permissions: '755'
+  
+- path: /bin/jupyter-install-bashtop.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Install Bashtop."
+    echo " "
+    git clone https://github.com/aristocratos/bashtop
+    
+    # cd bashtop
+    # bash bashtop
+    
+    echo " "
+    echo "---------------> Install Bashtop finished."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-install-virtual-env.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Create Python Virtual Environment with Dependencies."
+    echo " "
+    
+    pip3 install --upgrade pip
+    pip3 install virtualenv
+    
+    export PATH=$PATH:/home/ubuntu/.local/bin
+    
+    virtualenv notebook
+    source notebook/bin/activate
+    
+    # --------------------------------------------------------------------------------------------
+    
+    # Erre oda kell figyelni, hogy mit veszek le
+    
+    # --------------------------------------------------------------------------------------------
+    
+    wget --no-cache https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter.txt
+    
+    pip3 install -r requirements_jupyter.txt
+    
+    # --------------------------------------------------------------------------------------------
+    
+    echo " "
+    echo "---------------> Create Python Virtual Environment with Dependencies finished."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-install-notebook-extentions.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Install Jupyter extentions."
+    echo " "
+    source notebook/bin/activate
+    # jupyter notebook --generate-config
+    jupyter contrib
+    jupyter contrib --version
+    jupyter contrib nbextension install --user
+    jupyter nbextensions_configurator enable --user
+    
+    # jupyter notebook password
+    # jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse
+
+    echo " "
+    echo "---------------> Install Jupyter extentions finished."
+    echo " "
+  permissions: '755'
+  
+- path: /bin/jupyter-install-ssh.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Nyomorek id_rsa-t fell kell rakni az .ssh konyvtrba onnan meg at a root-nak hogy elerje a workereket."
+    echo " "
+
+    # scp /home/ubuntu/.ssh/id_rsa ubuntu@xxx.xxx.xxx.xxx:/home/ubuntu/.ssh/
+    # cp /home/ubuntu/.ssh/id_rsa /root/.ssh/
+
+    echo " "
+    echo "---------------> Nyomorek id_rsa-t fell kell rakni az .ssh konyvtrba onnan meg at a root-nak hogy elerje a workereket."
+    echo " "
+  permissions: '755'
+  
+- path: /bin/jupyter-install-latex.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Install Latex started."
+    echo " "
+
+    sudo apt-get -y install dvipng texlive-latex-extra texlive-fonts-recommended cm-super
+
+    echo " "
+    echo "---------------> Install Latex finishted."
+    echo " "
+  permissions: '755'
+  
+- path: /bin/jupyter-config-git.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Config Git started."
+    echo " "
+
+    git config --global user.name "JoDeMiro"
+    git config --global user.email "joedemiro@pintye.com"
+
+    echo " "
+    echo "---------------> Config Git finishted."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-clean.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo "---------------> Install Cleaner started."
+    echo " "
+
+    sudo apt-get -y autoclean
+    sudo apt-get -y autoremove
+    sudo apt-get -y purge
+
+    echo " "
+    echo "---------------> Install Cleaner finishted."
+    echo " "
+  permissions: '755'
+
+- path: /bin/jupyter-todo.sh
+  content: |
+    #!/bin/bash
+    echo " "
+    echo " "
+
+    echo "-------------------------------------------------------------------"
+    echo " "
+    echo "            - Le kell jelszavazni a Jupytert                       "
+    echo "              jupyter notebook password                            "
+    echo "            - Fell kell tolni az SSH kulcsot                       "
+    echo "            - El kell inditani a Jupytert                          "
+    echo "              jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse"
+    echo " "
+    echo "-------------------------------------------------------------------"
+
+    echo " "
+    echo " "
+  permissions: '755'
+
+
+runcmd:
+- echo "---------------> JoDeMiro Deployment starts."
+- /bin/jupyter-add-user.sh
+- su - ubuntu -c /bin/jupyter-update.sh
+- su - ubuntu -c /bin/jupyter-add-base-tools.sh
+- su - ubuntu -c /bin/jupyter-install-ext.sh
+- su - ubuntu -c /bin/jupyter-install-bashtop.sh
+- su - ubuntu -c /bin/jupyter-install-virtual-env.sh
+- su - ubuntu -c /bin/jupyter-install-notebook-extentions.sh
+# - su - ubuntu -c /bin/jupyter-install-latex.sh
+- su - ubuntu -c /bin/jupyter-install-ssh.sh
+- su - ubuntu -c /bin/jupyter-config-git.sh
+- su - ubuntu -c /bin/jupyter-clean.sh
+- su - ubuntu -c /bin/jupyter-todo.sh
+- echo "---------------> JoDeMiro Deployment finished."
