@@ -57,6 +57,7 @@ write_files:
     sudo apt-get -y install libsm6
     sudo apt-get -y install libxext6
     sudo apt-get -y install graphviz
+    sudo apt-get -y install pkg-config
     
     echo "---------------> Installing some stuff needed for Python finished."
   permissions: '755'
