@@ -23,7 +23,8 @@ termcolor==2.0.1
 SciencePlots==1.0.9
 
 Pillow==9.2.0
-tensorflow==2.10.0
+# tensorflow==2.10.0
+tensorflow==2.10.1
 tensorflow-addons==0.18.0
 librosa==0.9.2
 seaborn==0.12.0
