@@ -1,0 +1,66 @@
+# Basic Python Install.ipynb
+
+
+# Remove the Ubuntu 18.0
+sudo apt purge -y python2.7-minimal
+
+# Add new repository
+sudo add-apt-repository ppa:deadsnakes/ppa
+
+sudo apt-get -y update
+
+# Python
+apt list | grep python3.10
+
+# Install
+sudo apt-get install -y python3.10
+
+# Verification
+python3.10 --version
+
+# Get the latest Pip
+curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+
+# Alias, symbolic link
+sudo ln -s /usr/bin/pip3 /usr/bin/pip
+
+# Verification
+python3.10 -m pip --version
+
+# Upgrade
+python3.10 -m pip install --upgrade pip
+
+# Upgrade
+python3.10 -m pip install --upgrade pip setuptools wheel
+
+# Virtual Env
+python3.10 -m pip install virtualenv
+
+# Create a Virtual Env
+python3.10 -m virtualenv notebook
+
+# Activate
+source notebook/bin/activate
+
+# Get Requirements
+wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter.txt
+
+# Install Requirements
+python3.10 -m pip install -r requirements_jupyter.txt
+
+# Remove unnecessary versions
+sudo apt-get -y purge python3.9
+sudo apt-get -y purge python3.8
+sudo apt-get -y purge python3.7
+sudo apt-get -y purge python3.6
+sudo apt-get -y autoremove
+
+# Uninstall a module
+# sudo python3.10 -m pip uninstall <module>
+
+# Start Jupyter
+jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse
+# jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse &> /dev/null &
+
+# Stop Jupyter
+# kill -9 $(pgrep jupyter)
