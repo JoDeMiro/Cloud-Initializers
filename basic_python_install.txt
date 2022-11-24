@@ -1,19 +1,56 @@
 # Basic Python Install.ipynb
 
+# Check the current Linux version
+cat /etc/os-release
+uname -mrs
+lsb_release -a
 
-# Remove the Ubuntu 18.0
-sudo apt purge -y python2.7-minimal
+# Remove Python 2.7
+yes | sudo apt purge python2.7-minimal
+
+# Remove any Python
+yes | sudo apt purge python3.9
+yes | sudo apt purge python3.8
+yes | sudo apt purge python3.7
+yes | sudo apt purge python3.6
+yes | sudo apt autoremove
+
+# Clean
+yes | sudo apt autoremove
+yes | sudo apt clean
+
+# Update and Upgrade Ubuntu
+yes | sudo apt-get update
+yes | sudo apt-get upgrade
+
+yes | sudo apt update
+yes | sudo apt upgrade
+
+yes | sudo apt install update-manager-core
+yes | sudo apt install ubuntu-release-upgrader-core
+
+# Ez eddig meg soha nem mukodott
+# sudo do-release-upgrade  -c
 
 # Add new repository
-sudo add-apt-repository -y ppa:deadsnakes/ppa
+yes | sudo add-apt-repository ppa:deadsnakes/ppa
 
-sudo apt-get -y update
+yes | sudo apt-get update
+yes | sudo apt update
+
+# Python related cuclik
+# yes | sudo apt-get install llvm
+yes | sudo apt-get install libc6-dev
+yes | sudo apt-get install libxext6
+yes | sudo apt-get install libsm6
+yes | sudo apt-get install graphviz
+yes | sudo apt-get install pkg-config
 
 # Python
 apt list | grep python3.10
 
 # Install
-sudo apt-get install -y python3.10
+yes | sudo apt-get install -y python3.10
 
 # Verification
 python3.10 --version
@@ -47,13 +84,6 @@ wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirem
 
 # Install Requirements
 python3.10 -m pip install -r requirements_jupyter.txt
-
-# Remove unnecessary versions
-sudo apt-get -y purge python3.9
-sudo apt-get -y purge python3.8
-sudo apt-get -y purge python3.7
-sudo apt-get -y purge python3.6
-sudo apt-get -y autoremove
 
 # Uninstall a module
 # sudo python3.10 -m pip uninstall <module>
