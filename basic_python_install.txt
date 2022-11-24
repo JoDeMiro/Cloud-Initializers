@@ -30,7 +30,7 @@ yes | sudo apt install update-manager-core
 yes | sudo apt install ubuntu-release-upgrader-core
 
 # Ez eddig meg soha nem mukodott
-# sudo do-release-upgrade  -c
+# sudo do-release-upgrade -c
 
 # Add new repository
 yes | sudo add-apt-repository ppa:deadsnakes/ppa
@@ -50,7 +50,7 @@ yes | sudo apt-get install pkg-config
 apt list | grep python3.10
 
 # Install
-yes | sudo apt-get install -y python3.10
+yes | sudo apt-get install python3.10
 
 # Verification
 python3.10 --version
