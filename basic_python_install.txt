@@ -80,7 +80,13 @@ python3.10 -m virtualenv notebook
 source notebook/bin/activate
 
 # Get Requirements
-wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter.txt
+# wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter.txt
+
+# Get Requirements without concrete version number
+# wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter_free.txt
+
+# Get Requirements
+wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter_python_3_10.txt
 
 # Install Requirements
 python3.10 -m pip install -r requirements_jupyter.txt
