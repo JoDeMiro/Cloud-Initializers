@@ -1,0 +1,133 @@
+# NVidia CUDA Install instructions
+# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+
+# Check the current Linux version
+cat /etc/os-release
+uname -mrs
+lsb_release -a
+
+# Update and Upgrade Ubuntu
+apt-get update
+apt update
+
+# Python related cuclik
+apt-get install -y libc6-dev
+apt-get install -y libxext6
+apt-get install -y libsm6
+apt-get install -y graphviz
+apt-get install -y pkg-config
+apt-get install -y gcc
+
+# Utils
+apt install -y curl
+apt install -y wget
+apt install -y nano
+apt install -y pciutils
+
+# Python
+apt list | grep python3.10
+
+# Install
+apt-get install -y python3.10
+
+# Verification
+python3.10 --version
+
+# Get the latest Pip
+curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+
+# Alias, symbolic link
+ln -s /usr/bin/pip3 /usr/bin/pip
+
+# Upgrade
+python3.10 -m pip install --upgrade pip
+
+# Upgrade
+python3.10 -m pip install --upgrade pip setuptools wheel
+
+# Virtual Env
+python3.10 -m pip install virtualenv
+
+# Create a Virtual Env
+python3.10 -m virtualenv notebook
+
+# Activate
+source notebook/bin/activate
+
+# Get Requirements without concrete version number
+wget https://raw.githubusercontent.com/JoDeMiro/Cloud-Initializers/main/requirements_jupyter_free.txt
+
+# Install Requirements
+# python3.10 -m pip install -r requirements_jupyter_free.txt
+
+# Config Notebook Extentions
+jupyter contrib --version
+jupyter contrib nbextension install --user
+jupyter nbextensions_configurator enable --user
+
+# Start Jupyter
+# jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse
+# jupyter notebook --ip=0.0.0.0 --port=8888 --no-browse &> /dev/null &
+
+# Stop Jupyter
+# kill -9 $(pgrep jupyter)
+
+# --------------------------------------------------------------------
+
+
+# Verify CUDA-Capable GPU
+lspci | grep -i nvidia
+
+# Verify version of Linux
+uname -m && cat /etc/*release
+
+# Verify gcc has been installed
+gcc --version
+
+# Verify the System has the Correct Kernel Headers and Development Packages Installed
+uname -r
+
+# Install (network version)
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+dpkg -i cuda-keyring_1.0-1_all.deb
+apt-get update
+apt-get -y install cuda
+
+# Install (package version)
+# apt-get -y install nvidia-cuda-toolkit
+
+# --------------------------------------------------------------------
+
+
+nvidia-smi
+
+nvidia-smi -l 1
+
+nvidia-smi --query-gpu=gpu_name,driver_version,memory.total --format=csv
+
+nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader
+
+# --------------------------------------------------------------------
+
+# test.py
+
+from tensorflow.python.client import device_lib
+
+def get_available_devices():
+    local_device_protos = device_lib.list_local_devices()
+    return [x.name for x in local_device_protos]
+
+print(get_available_devices())
+
+
+print('\n\n---------------------------------------\n\n')
+
+import tensorflow as tf
+
+print(tf.config.list_physical_devices('GPU'))
+
+print(tf.test.is_gpu_available())
+
+print(tf.test.is_gpu_available(cuda_only=True))
+
+
