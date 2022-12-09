@@ -57,6 +57,7 @@ python3.10 --version
 
 # Get the latest Pip
 curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.10
 
 # Alias, symbolic link
 sudo ln -s /usr/bin/pip3 /usr/bin/pip
