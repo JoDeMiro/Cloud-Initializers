@@ -42,6 +42,7 @@ yes | sudo apt update
 # yes | sudo apt-get install llvm
 yes | sudo apt-get install libc6-dev
 yes | sudo apt-get install libsqlite3-dev
+yes | sudo apt-get install libbz2-dev
 yes | sudo apt-get install libxext6
 yes | sudo apt-get install libsm6
 yes | sudo apt-get install ffmpeg
