@@ -27,3 +27,4 @@ librosa
 seaborn
 statsmodels
 pyvis
+imutil
