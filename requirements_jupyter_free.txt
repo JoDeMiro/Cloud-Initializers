@@ -29,4 +29,3 @@ statsmodels
 pyvis
 rich
 imutils
-
